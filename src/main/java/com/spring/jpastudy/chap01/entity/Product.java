@@ -7,7 +7,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter @ToString
+@Getter
+@ToString(exclude = "nickName")
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,6 +24,7 @@ public class Product {
     @Column(name= "prod_id")
     private Long id; // PK
 
+    @Setter
     @Column(name= "prod_nm", length = 30, nullable = false) // VARCHAR(30) NOT NULL
     private String name; // 상품명
 
@@ -40,6 +42,7 @@ public class Product {
     @Transient
     private String nickName;
 
+    @Setter
     @Column(nullable = false)
     @Enumerated(EnumType.STRING) // EnumType.ORDINAL로 하면 int 타입으로 됨
     private Category category; // 상품 카테고리
@@ -47,5 +50,17 @@ public class Product {
     public enum Category {
         FOOD, FASHION, ELECTRONIC
     }
+
+    // 컬럼 기본값 설정 (defualt value)
+    @PrePersist
+    public void prePersist() {
+        if (this.price == 0) {
+            this.price = 10000;
+        }
+        if (this.category == null) {
+            this.category = Category.FOOD;
+        }
+    }
+
 
 }
