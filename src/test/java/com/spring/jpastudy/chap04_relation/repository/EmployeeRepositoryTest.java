@@ -81,6 +81,11 @@ class EmployeeRepositoryTest {
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
         System.out.println("employee = " + employee);
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+
+        // LAZY Loading이여도 get(FK)을 하는 순간 다른 테이블을 참조. 
+        Department department = employee.getDepartment();
+        System.out.println("department = " + department);
+
     }
 
 
