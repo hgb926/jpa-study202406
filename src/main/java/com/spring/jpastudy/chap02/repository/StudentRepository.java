@@ -2,10 +2,12 @@ package com.spring.jpastudy.chap02.repository;
 
 import com.spring.jpastudy.chap02.entity.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface StudentRepository extends JpaRepository<Student, String> {
 
@@ -41,4 +43,35 @@ public interface StudentRepository extends JpaRepository<Student, String> {
     // 다른 방법. 파라미터가 ?1 부터 자동으로 바인딩 된다.
     @Query(value = "SELECT * FROM tbl_student WHERE stu_name = ?1 OR city = ?2", nativeQuery = true)
     List<Student> getStudentByNameOrCity2(String name, String city);
+
+
+    /*
+        - JPQL (테이블 접근x 자바 클래스에 접근)
+
+        SELECT 엔터티별칭
+        FROM 엔터티클래스명 AS 엔터티별칭 (as 생략 가능)
+        WHERE 별칭.필드명
+
+        ex) native - SELECT * FROM tbl_student WHERE stu_name = ?
+            JPQL   - SELECT st FROM Student AS st WHERE st.name = ?
+
+     */
+
+    // 도시명으로 학생 1명을 단일 조회
+    // Optional은 null 방지 용도
+    @Query(value = "SELECT st FROM Student st WHERE st.city = ?1")
+    Optional<Student> getByCityWithJPQL(String city);
+
+    // 특정 이름이 포함된 학생 리스트 조회하기
+    @Query("SELECT stu FROM Student stu WHERE stu.name LIKE %?1%")
+    List<Student> searchByNameWithJPQL(String name);
+
+
+    // JPQL로 갱신 처리하기
+
+    @Modifying
+    // SELECT 외 나머지 쿼리는 무조건 @Modifying을 붙혀야 한다.
+    @Query("DELETE FROM Student s WHERE s.name = ?1 AND s.city = ?2")
+    void deleteByNameAndCity(String name, String city);
+
 }
