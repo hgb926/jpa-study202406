@@ -3,6 +3,7 @@ package com.spring.jpastudy.chap04_relation.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.swing.plaf.SpinnerUI;
 
 @Setter @Getter
 @ToString(exclude = "department")
@@ -31,5 +32,10 @@ public class Employee { // 다 (many)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dept_id") // FK 컬럼명
     private Department department; // 1 (one)
+
+    public void changeDepartment(Department department) {
+        this.department = department;
+        department.getEmployees().add(this);
+    }
 
 }
