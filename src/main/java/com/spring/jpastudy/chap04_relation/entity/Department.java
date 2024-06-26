@@ -1,6 +1,5 @@
 package com.spring.jpastudy.chap04_relation.entity;
 
-
 import lombok.*;
 
 import javax.persistence.*;
@@ -14,19 +13,17 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 @Entity
 @Table(name = "tbl_dept")
-public class Department { // 1. One
+public class Department {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "dept_id")
-    private Long id; // 부서 번호
+    private Long id; // 부서번호
 
     @Column(name = "dept_name", nullable = false)
     private String name;
-
 
     /*
         - 양방향 매핑은 데이터베이스와 달리 객체지향 시스템에서 가능한 방법으로
@@ -37,8 +34,17 @@ public class Department { // 1. One
            단순히 읽기전용 (조회전용)으로만 사용하는 것이다.
         - mappedBy에는 상대방 엔터티에 @ManyToOne에 대응되는 필드명을 꼭 적어야 함
      */
+    @OneToMany(mappedBy = "department", orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<Employee> employees = new ArrayList<>();
 
-    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY) // 상대방클래스에서 정의한 내 클래스 명
-    private List<Employee> employees = new ArrayList<>(); // 다. Many, NullPointerException 방지로 초기화.
+    public void removeEmployee(Employee employee) {
+        this.employees.remove(employee);
+        employee.setDepartment(null);
+    }
+
+    public void addEmployee(Employee employee) {
+        this.employees.add(employee);
+        employee.setDepartment(this);
+    }
 
 }
