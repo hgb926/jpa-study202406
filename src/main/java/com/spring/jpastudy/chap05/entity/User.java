@@ -27,6 +27,7 @@ public class User {
     private String name;
 
     @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = CascadeType.ALL)
+    @Builder.Default // test에서 빨간줄 제거
     private List<Purchase> purchaseList = new ArrayList<>();
 
 
