@@ -48,7 +48,7 @@ public class Department {
 
     // 1개(one)의 부서가, 여러 사원(many)의 정보를 가지고 있어서 @OneToMany
     //           상대방이 정의한 내 이름,   고아 삭제 ture,   연쇄삭제
-    @OneToMany(mappedBy = "department", orphanRemoval = true,
+    @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, orphanRemoval = true,
             cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     private List<Employee> employees = new ArrayList<>();
 
