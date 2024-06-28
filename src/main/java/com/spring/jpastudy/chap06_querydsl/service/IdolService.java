@@ -31,7 +31,7 @@ public class IdolService {
         // 방법 2
 //        List<Idol> idolList = idolRepository.findAllBySorted();
 
-        List<Idol> idolList = idolRepository.findByGroupName();
+        List<Idol> idolList = idolRepository.foundByGroupName();
 
         return idolList;
     }
