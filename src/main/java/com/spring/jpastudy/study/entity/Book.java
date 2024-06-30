@@ -3,34 +3,26 @@ package com.spring.jpastudy.study.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
-@Getter
+@Setter @Getter
 @ToString
 @EqualsAndHashCode(of = "id")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 @Entity
-@Table(name= "book")
+@Table(name="book") // many
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
-    @Column(name = "book_id")
-    private Long bookId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="book_id")
+    private Long id;
 
-    @Setter
-    private String title;
-
-    private String author;
-
-    private LocalDate publishedDate;
+    @Column(name="book_name", nullable = false)
+    private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id")
-    private Author authorId;
+    @JoinColumn(name = "author_id") // 상대방의 PK
+    private Author author;
 }
